@@ -49,6 +49,7 @@ int main()
         }
 
         string file_name;
+        file_name="initialfile.txt";
         ifstream file(file_name, ios::binary);   // this part will help to open the file
         if (!file.is_open())
         {
