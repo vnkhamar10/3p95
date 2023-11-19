@@ -11,63 +11,58 @@ int main()
     int server, client;
     struct sockaddr_in addserver, addclient;
 
-    server = socket(AF_INET, SOCK_STREAM, 0);
+    server = socket(AF_INET,SOCK_STREAM,0);  //create a socket for server
     if (server == 0)
     {
-        cerr << "Socket creation error" << endl;
+        cerr << "Can not create server" << endl;
         return 1;
     }
 
-    addserver.sin_family = AF_INET;
-    addserver.sin_addr.s_addr = INADDR_ANY;
+    addserver.sin_family = 0;
+    addserver.sin_addr.s_addr = 0;
     addserver.sin_port = htons(8080);
 
-    if (bind(server, (struct sockaddr *)&addserver, sizeof(addserver)) < 0)
+    if (bind(server, (struct sockaddr *)&addserver, sizeof(addserver)) < 0)   // to help bind the socket
     {
         cerr << "Binding error" << endl;
         return 1;
     }
-
-    listen(server, 5);
+  
+    listen(server, 5);          // this is to listen for socket
     cout << "Localhost" << endl;
 
     char buffer[1024] = {0};
 
     while (true)
     {
-        client = accept(server, (struct sockaddr *)&addclient, (socklen_t *)&addclient);
+        client = accept(server, (struct sockaddr *)&addclient, (socklen_t *)&addclient);  // this is to accept the file in server side
         if (client < 0)
         {
             cerr << "error" << endl;
-            continue;
         }
 
-        int valread = read(client, buffer, 1024);
-        if (valread < 0)
+        int value = read(client, buffer, 1024);
+        if (value < 0)
         {
             cerr << "Reading error" << endl;
             close(client);
-            continue;
         }
 
         string file_name;
-        ifstream file(file_name, ios::binary);
+        ifstream file(file_name, ios::binary);   // this part will help to open the file
         if (!file.is_open())
         {
             cerr << "Error opening file: " << file_name << endl;
             close(client);
-            continue;
         }
 
-        file.seekg(0, ios::end);
-        int file_size = file.tellg();
-        file.seekg(0, ios::beg);
-
-        char *file_contents = new char[file_size];
-        file.read(file_contents, file_size);
+        int size = file.tellg();
+        
+        char *file_contents = new char[size];
+        file.read(file_contents, size);
         file.close();
 
-        send(client, file_contents, file_size, 0);
+        cout<<client<<file_contents<<size<<endl;
 
         delete[] file_contents;
         close(client);
