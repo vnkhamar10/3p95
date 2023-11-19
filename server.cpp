@@ -18,7 +18,7 @@ int main()
         return 1;
     }
 
-    addserver.sin_family = 0;
+    addserver.sin_family = AF_INET;  // this is to communicate between processes on different hosts connected by IPV4
     addserver.sin_addr.s_addr = 0;
     addserver.sin_port = htons(8080);
 
