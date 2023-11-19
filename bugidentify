@@ -1,0 +1,12 @@
+        string file_name;     
+        ifstream file(file_name, ios::binary);   // this part will help to open the file
+        if (!file.is_open())
+        {
+            cerr << "Error opening file: " << file_name << endl;
+            close(client);
+        }
+BUG:
+Bug here is that we are not initializing file name and that will mean that compiler is trying to open a file which is not declared. Thus, resulting in not opening any file and causing an error
+The aim behind statistical debugging is to find defects in programs by utilizing statistical models of success or failure.
+These statistical models reveal connections between particular program behaviours and a run's ultimate success or failure.
+So, in this situation if we find out that file is not being read. we can check where file is initialized. And that is how we will find the bug. 
